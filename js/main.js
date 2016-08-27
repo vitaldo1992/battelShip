@@ -171,28 +171,28 @@ var array = [];
 })();
 var lastShoots = [];
 var ammountOfDecks = 0;
-var ammountOfDecksOfComputer = 1;
+var ammountOfDecksOfComputer = 0;
 
 
 
-function checkAllTheDecksOfComputer() {
-	var trsForShoot = document.querySelector("#computerShips").children[0].children;
-	for (var i = 0; i<10; i++) {
-		for (var u = 0; u<10; u++) {
+// function checkAllTheDecksOfComputer() {
+// 	var trsForShoot = document.querySelector("#computerShips").children[0].children;
+// 	for (var i = 0; i<10; i++) {
+// 		for (var u = 0; u<10; u++) {
 
 
-			if (trsForShoot[i].children[u].obj.shooted == true && trsForShoot[i].children[u].obj.chip == true) {
-				++ammountOfDecksOfComputer;
-				if (ammountOfDecksOfComputer==20) {
-					alert("You are win");
-				}
-			}
+// 			if (trsForShoot[i].children[u].obj.shooted == true && trsForShoot[i].children[u].obj.chip == true) {
+// 				++ammountOfDecksOfComputer;
+// 				// if (ammountOfDecksOfComputer==20) {
+// 				// 	alert("You are win");
+// 				// }
+// 			}
 
-		}
-	}
-	console.log(ammountOfDecksOfComputer);
-	ammountOfDecksOfComputer=0;
-}
+// 		}
+// 	}
+// 	console.log(ammountOfDecksOfComputer);
+
+// }
 
 
 (function bindObjectsСomputerShips() {
@@ -207,7 +207,7 @@ function checkAllTheDecksOfComputer() {
 
 			trs[i].children[j].obj = array[i][j];
 			trs[i].children[j].addEventListener("click", ev);
-			trs[i].children[j].addEventListener("click", checkAllTheDecksOfComputer);
+			// trs[i].children[j].addEventListener("click", checkAllTheDecksOfComputer);
 			function ev () {
 
 				this.obj.shooted = true;
@@ -215,15 +215,19 @@ function checkAllTheDecksOfComputer() {
 
 			trs[i].children[j].addEventListener("click", check);
 			function check() {
-				if (elem=="computerShips") {
-					lastShoots.push(this.obj.chip);
-				}
+
 
 				if (this.obj.chip == true && this.obj.shooted == true) {
 
 					this.style.backgroundColor = "red";
 
 				} else {this.style.backgroundColor="#68FF2C"}
+
+				if (elem=="computerShips") {
+					lastShoots.push(this.obj.chip);
+					ammountOfDecksOfComputer++;
+					console.log(ammountOfDecksOfComputer);
+				}
 
 			}
 			trs[i].children[j].addEventListener("click", checkObj);
@@ -255,8 +259,6 @@ function checkAllTheDecksOfComputer() {
 					for (var i = 0;i<shipObj.arr_decks.length;i++) {
 						if (shipObj.arr_decks[i].shooted==true && shipObj.arr_decks[i].chip==true) {
 							++check;
-							checkAllTheDecksOfComputer;
-
 						}
 					}
 
@@ -297,6 +299,25 @@ function checkAllTheDecksOfComputer() {
 			}
 		}
 
+		if (elem=="myShips") {
+			var trs = document.querySelector("#myShips").children[0].children;
+			for (var i=0;i<10;i++) {
+				for (var j=0;j<10;j++) {
+					trs[i].children[j].addEventListener("click",CheckCheck)
+				}
+			}
+
+			function CheckCheck() {
+				// alert(ammountOfDecksOfComputer);
+				// checkAllTheDecksOfComputer();
+				console.log(ammountOfDecksOfComputer);
+				if (ammountOfDecksOfComputer==20) {
+					alert("You are win");
+				}
+				ammountOfDecksOfComputer=0;
+			}
+
+		}
 
 
 		if (elem=="computerShips") {
