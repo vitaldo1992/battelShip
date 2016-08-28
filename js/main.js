@@ -170,8 +170,33 @@ var array = [];
 	}
 })();
 var lastShoots = [];
+var ammountOfDecks = 0;
+var ammountOfDecksOfComputer = 0;
+
+
+
+// function checkAllTheDecksOfComputer() {
+// 	var trsForShoot = document.querySelector("#computerShips").children[0].children;
+// 	for (var i = 0; i<10; i++) {
+// 		for (var u = 0; u<10; u++) {
+
+
+// 			if (trsForShoot[i].children[u].obj.shooted == true && trsForShoot[i].children[u].obj.chip == true) {
+// 				++ammountOfDecksOfComputer;
+// 				// if (ammountOfDecksOfComputer==20) {
+// 				// 	alert("You are win");
+// 				// }
+// 			}
+
+// 		}
+// 	}
+// 	console.log(ammountOfDecksOfComputer);
+
+// }
+
 
 (function bindObjectsСomputerShips() {
+
 
 	var trsMy = document.querySelector("#myShips").children[0].children;
 	var trsComputer = document.querySelector("#computerShips").children[0].children;
@@ -182,6 +207,7 @@ var lastShoots = [];
 
 			trs[i].children[j].obj = array[i][j];
 			trs[i].children[j].addEventListener("click", ev);
+			// trs[i].children[j].addEventListener("click", checkAllTheDecksOfComputer);
 			function ev () {
 
 				this.obj.shooted = true;
@@ -189,9 +215,7 @@ var lastShoots = [];
 
 			trs[i].children[j].addEventListener("click", check);
 			function check() {
-				if (elem=="computerShips") {
-					lastShoots.push(this.obj.chip);
-				}
+
 
 				if (this.obj.chip == true && this.obj.shooted == true) {
 
@@ -199,8 +223,24 @@ var lastShoots = [];
 
 				} else {this.style.backgroundColor="#68FF2C"}
 
+				if (elem=="computerShips") {
+					lastShoots.push(this.obj.chip);
+					ammountOfDecksOfComputer++;
+					console.log(ammountOfDecksOfComputer);
+				}
+
 			}
 			trs[i].children[j].addEventListener("click", checkObj);
+
+
+
+
+			var firstCripperCoords = {
+				ammountOfChips: 10,
+				k: undefined,
+				f: undefined
+			}
+
 			function checkObj() {
 				ceckInside(_4decks );
 				ceckInside(_3decks1 );
@@ -218,7 +258,7 @@ var lastShoots = [];
 
 					for (var i = 0;i<shipObj.arr_decks.length;i++) {
 						if (shipObj.arr_decks[i].shooted==true && shipObj.arr_decks[i].chip==true) {
-							++check
+							++check;
 						}
 					}
 
@@ -259,192 +299,208 @@ var lastShoots = [];
 			}
 		}
 
+		if (elem=="myShips") {
+			var trs = document.querySelector("#myShips").children[0].children;
+			for (var i=0;i<10;i++) {
+				for (var j=0;j<10;j++) {
+					trs[i].children[j].addEventListener("click",CheckCheck)
+				}
+			}
+
+			function CheckCheck() {
+				// alert(ammountOfDecksOfComputer);
+				// checkAllTheDecksOfComputer();
+				console.log(ammountOfDecksOfComputer);
+				if (ammountOfDecksOfComputer==20) {
+					alert("You are win");
+				}
+				ammountOfDecksOfComputer=0;
+			}
+
+		}
+
 
 		if (elem=="computerShips") {
 			var trsForShoot = document.querySelector("#myShips").children[0].children;
+			var lastFunk;
+
+
+			function rightSoot(u,v) {
+				v++;
+				lastFunk = "right";
+				if (trsForShoot[u].children[v]) {
+
+					if (trsForShoot[u].children[v].obj.shooted == true) {
+						leftShoot(firstCripperCoords.k,firstCripperCoords.f);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == true) {
+						ammountOfDecks++;
+						trsForShoot[u].children[v].click();
+						rightSoot(u,v);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == false) {
+						trsForShoot[u].children[v].click();
+					}
+
+				} else {
+					leftShoot(firstCripperCoords.k,firstCripperCoords.f)
+				}
+			}
+
+
+			function leftShoot(u,v) {
+				v--;
+				lastFunk = "left";
+				if (trsForShoot[u].children[v]) {
+
+					if (trsForShoot[u].children[v].obj.shooted == true) {
+						downShoot(firstCripperCoords.k,firstCripperCoords.f);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == true) {
+						ammountOfDecks++;
+						trsForShoot[u].children[v].click();
+						leftShoot(u,v);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == false) {
+						trsForShoot[u].children[v].click();
+					}
+
+				} else {
+					downShoot(firstCripperCoords.k,firstCripperCoords.f)
+				}
+			}
+
+			function downShoot(u,v) {
+				u++;
+				lastFunk = "down";
+				if (trsForShoot[u]) {
+
+					if (trsForShoot[u].children[v].obj.shooted == true) {
+						upShoot(firstCripperCoords.k,firstCripperCoords.f);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == true) {
+						ammountOfDecks++;
+						trsForShoot[u].children[v].click();
+						downShoot(u,v);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == false) {
+						trsForShoot[u].children[v].click();
+					}
+
+				} else {
+					upShoot(firstCripperCoords.k,firstCripperCoords.f)
+				}
+			}
+
+			function upShoot(u,v) {
+				u--;
+				lastFunk = "up";
+				if (trsForShoot[u]) {
+
+					if (trsForShoot[u].children[v].obj.shooted == true) {
+						firstCripperCoords.k = undefined;
+						firstCripperCoords.f = undefined;
+						shoot();
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == true) {
+						ammountOfDecks++;
+						trsForShoot[u].children[v].click();
+						upShoot(u,v);
+					} else if (trsForShoot[u].children[v].obj.shooted == false && trsForShoot[u].children[v].obj.chip == false) {
+						trsForShoot[u].children[v].click();
+						firstCripperCoords.k = undefined;
+						firstCripperCoords.f = undefined;
+					}
+
+				} else {
+					firstCripperCoords.k = undefined;
+					firstCripperCoords.f = undefined;
+					shoot();
+				}
+			}
+
+
 
 			for (var x=0;x<10;x++) {
 
 				for (var y=0;y<10;y++) {
-					var shoot;
-					var k,f,k2,f2,lastBoom,lastFunk;
 
+					function checkAllTheDecks() {
+						if (ammountOfDecks==20) {
+							alert("Computer Win!");
 
-					shoot = function () {
-						console.log("lastBoom",lastBoom,k2,f2);
+						}
+					}
+
+					function shoot() {
+						console.log("was",firstCripperCoords);
 
 						k = Math.round(Math.random(1,0)*9);
 						f = Math.round(Math.random(1,0)*9);
 
-						function rightShoot(b,c) {
-							console.log("r");
-							++c;
-							if ((trsForShoot[b].children[c])) {
-								console.log(trsForShoot[b].children[c]);
-								if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == true) {
-									trsForShoot[b].children[c].click();
-									alert("toright");
-									rightShoot(b,c);
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == false) {
-									lastFunk = "right";
-									trsForShoot[b].children[c].click();
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == true) {
-									// alert("cell is shooted");
-									leftShoot(k,f);
-								}
-
-
-							} else {
-								alert("the cell is absence",b,c);
-								leftShoot(k,f);
-							}
-						}
-
-
-						function leftShoot(b,c) {
-							console.log("l");
-							--c;
-							if ((trsForShoot[b].children[c])) {
-								console.log(trsForShoot[b].children[c]);
-								if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == true) {
-									trsForShoot[b].children[c].click();
-									alert("toleft");
-									leftShoot(b,c);
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == false) {
-									lastFunk = "left";
-									trsForShoot[b].children[c].click();
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == true) {
-									// alert("cell is shooted");
-									downShoot(k,f);
-								}
-
-
-							} else {
-								alert("the cell is absence",b,c);
-								downShoot(k,f)
-
-							}
-						}
-
-
-						function downShoot(b,c) {
-							console.log("d");
-							++b;
-							if ((trsForShoot[b])) {
-								console.log(trsForShoot[b].children[c]);
-								if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == true) {
-									trsForShoot[b].children[c].click();
-									alert("todown");
-									downShoot(b,c);
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == false) {
-									lastFunk = "down";
-									trsForShoot[b].children[c].click();
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == true) {
-									// alert("cell is shooted");
-									upShoot(k,f);
-								}
-
-
-							} else {
-								alert("the cell is absence",b,c);
-								upShoot(k,f);
-							}
-						}
-
-
-						function upShoot(b,c) {
-							console.log("u");
-							--b;
-							if ((trsForShoot[b])) {
-								console.log(trsForShoot[b].children[c]);
-								if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == true) {
-									trsForShoot[b].children[c].click();
-									alert("toup");
-									upShoot(b,c);
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == false && trsForShoot[b].children[c].obj.chip == false) {
-									lastFunk = "up";
-									trsForShoot[b].children[c].click();
-
-								}
-								else if (trsForShoot[b].children[c].obj.shooted == true) {
-									alert("cell is shooted");
-									lastBoom==false;
-									// k2 = k;
-									// f2 = f;
-									shoot();
-								}
-
-
-							} else {
-								alert("the cell is absence",b,c);
-								lastBoom==false;
-								// k2 = k;
-								// f2 = f;
-								shoot();
-							}
-						}
-
-
-
 						if (lastShoots[lastShoots.length-1]==false) {
 
 
-							if (lastBoom == true && (lastFunk==undefined || lastFunk == "right")) {
-								alert("from",k2,f2);
-								leftShoot(k2,f2);
-							}
-							else if (lastBoom == true && lastFunk=="left") {
-								downShoot(k2,f2);
-							}
-							else if (lastBoom == true && lastFunk=="down") {
-								upShoot(k2,f2);
-							}
-							else if (lastBoom == true && lastFunk=="up") {
-								lastBoom==false;
+
+							if (lastFunk=="right" && firstCripperCoords.k != undefined) {
+								leftShoot(firstCripperCoords.k,firstCripperCoords.f);
+								return;
+							} else if (lastFunk=="left" && firstCripperCoords.k != undefined) {
+								downShoot(firstCripperCoords.k,firstCripperCoords.f);
+								return;
+							} else if (lastFunk=="down" && firstCripperCoords.k != undefined) {
+								upShoot(firstCripperCoords.k,firstCripperCoords.f);
+								return;
+							} else if (lastFunk=="up" && firstCripperCoords.k != undefined) {
+								lastFunk = undefined;
+								firstCripperCoords.k = undefined;
+								firstCripperCoords.f = undefined;
 								shoot();
+								return;
 							}
-							else if ( lastBoom == false || lastBoom == undefined ) {
 
-								if (trsForShoot[k].children[f].obj.shooted == true) {
-									// lastBoom = false;
-									shoot();
-								} else if (trsForShoot[k].children[f].obj.shooted == false && trsForShoot[k].children[f].obj.chip == true) {
 
-									lastBoom = true;
-									k2=k;f2=f;
-									trsForShoot[k].children[f].click();
-									rightShoot(k,f);
+							if (trsForShoot[k].children[f].obj.shooted == true) {
+
+								shoot();
+							} else if (trsForShoot[k].children[f].obj.shooted == false && trsForShoot[k].children[f].obj.chip == true) {
+								ammountOfDecks++;
+								if (firstCripperCoords.k==undefined || lastFunk=="up") {
+									firstCripperCoords.k = k;
+									firstCripperCoords.f = f;
+								}
+
+
+
+								trsForShoot[k].children[f].click();
+
+
+
 								// shoot();
+								rightSoot(k,f);
+
 							} else {
 
 								trsForShoot[k].children[f].obj.shooted = true;
 
 								trsForShoot[k].children[f].click();
-								lastBoom=false;
+
 
 							}
+
+
+
+
 						}
+
+						// console.log("now",firstCripperCoords);
+
 					}
-
-
-
+					trsComputer[x].children[y].addEventListener("click", shoot);
+					trsComputer[x].children[y].addEventListener("click", checkAllTheDecks);
 
 				}
 
-				trsComputer[x].children[y].addEventListener("click", shoot);
+
 
 			}
 		}
-	}
 
-})();
+
+	})();
 
 
 }
